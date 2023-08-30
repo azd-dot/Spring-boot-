@@ -19,7 +19,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
             select c.medico.id from Consulta c
             c.data=: fecha 
             ) 
-            
             order by rand()
             limit 1 
             """)
