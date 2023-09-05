@@ -1,7 +1,7 @@
-package med.voll.api.domain.infra.errores;
+package med.voll.api.infra.errores;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.aspectj.weaver.ast.Var;
+import jakarta.validation.ValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,14 +18,24 @@ public class TratadorDeErrores {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity tratarError400(MethodArgumentNotValidException e){
-        var errores = e.getFieldErrors().stream().map(DatosErrorValidacion::new);
-
+        var errores = e.getFieldErrors().stream().map(DatosErrorValidacion::new).toList();
         return ResponseEntity.badRequest().body(errores);
     }
 
-    private record DatosErrorValidacion(String campo, String error) {
-        public DatosErrorValidacion(FieldError error){
+    @ExceptionHandler(ValidacionDeIntegridad.class)
+    public ResponseEntity errorHandlerValidacionesIntegridad(Exception e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity errorHandlerValidacionesDeNegocio(Exception e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    private record DatosErrorValidacion(String campo, String error){
+        public DatosErrorValidacion(FieldError error) {
             this(error.getField(), error.getDefaultMessage());
         }
     }
+
 }
