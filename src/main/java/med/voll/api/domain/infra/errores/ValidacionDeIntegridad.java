@@ -1,4 +1,4 @@
-package med.voll.api.infra.errores;
+package med.voll.api.domain.infra.errores;
 
 public class ValidacionDeIntegridad extends RuntimeException {
     public ValidacionDeIntegridad(String s) {

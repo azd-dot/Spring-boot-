@@ -1,4 +1,4 @@
-package med.voll.api.infra.errores;
+package med.voll.api.domain.infra.errores;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
